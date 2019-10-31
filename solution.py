@@ -1,37 +1,43 @@
-
 from collections import deque
-
 class Solution(object):
-    def canFinish(self, numCourses, prerequisites):
+    def findMinHeightTrees(self, n, edges):
         """
-        :type numCourses: int
-        :type prerequisites: List[List[int]]
-        :rtype: bool
+        :type n: int
+        :type edges: List[List[int]]
+        :rtype: List[int]
         """
-        if not prerequisites: return True
+        adj = [[] for _ in range(n)]
 
-        indegree = [0] * numCourses # indegree
-
-        adj = [[] for _ in range(numCourses)] # adjacency set
-        edge = 0
-        for cur, pre in prerequisites:
-            indegree[cur] += 1
-            adj[pre].append(cur)
-            edge += 1
-        queue = deque()
-        for i in range(numCourses):
-            if not indegree[i]:
-                queue.append(i)
+        for e in edges:
+            adj[e[0]].append(e[1])
+            adj[e[1]].append(e[0])
         
-        if not queue:
-            return False
+        minhei = self.heightCalculate(0, n, adj)
+        heightList = [minhei]
+        ans = []
+        for root in range(1,n):
+            tmp = self.heightCalculate(root, n, adj)
+            heightList.append(tmp)
+        print(heightList)
+        return ans
+        
+    def heightCalculate(self, root, n, adj):
+        height = 0
+        visited = [0] * n
+        que = deque([root])
+        visited[root] = 1
+        while que:
+            length = len(que)
+            height += 1
+            while length > 0:
+                node = que.popleft()
+                for neibor in adj[node]:
+                    if not visited[neibor]:
+                        que.append(neibor)
+                        visited[neibor] = 1
+                length -= 1
+            
+        return height
 
-        while queue:
-            vertex = queue.popleft()
-            while adj[vertex]:
-                adjacency = adj[vertex].pop()
-                indegree[adjacency] -= 1
-                edge -= 1
-                if not indegree[adjacency]: queue.append(adjacency)
 
-        return not edge
+Solution().findMinHeightTrees(4,[[1,0],[1,2],[1,3]])
