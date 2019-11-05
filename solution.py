@@ -1,43 +1,41 @@
-from collections import deque
 class Solution(object):
-    def findMinHeightTrees(self, n, edges):
+    def exist(self, board, word):
         """
-        :type n: int
-        :type edges: List[List[int]]
-        :rtype: List[int]
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
         """
-        adj = [[] for _ in range(n)]
+        if not word:
+            return False
+        self.find(board, word)
 
-        for e in edges:
-            adj[e[0]].append(e[1])
-            adj[e[1]].append(e[0])
+    def find(self, board, word):
         
-        minhei = self.heightCalculate(0, n, adj)
-        heightList = [minhei]
-        ans = []
-        for root in range(1,n):
-            tmp = self.heightCalculate(root, n, adj)
-            heightList.append(tmp)
-        print(heightList)
-        return ans
-        
-    def heightCalculate(self, root, n, adj):
-        height = 0
-        visited = [0] * n
-        que = deque([root])
-        visited[root] = 1
-        while que:
-            length = len(que)
-            height += 1
-            while length > 0:
-                node = que.popleft()
-                for neibor in adj[node]:
-                    if not visited[neibor]:
-                        que.append(neibor)
-                        visited[neibor] = 1
-                length -= 1
-            
-        return height
+        for i in range(len(board)):
+            for j in range(len(board[i])):
+                if board[i][j] == word[0]:
+                    visited = [[False] * len(board[i]) for _ in range(len(board))]
+                    self.dfs(board, i, j, word, 1, visited)
 
 
-Solution().findMinHeightTrees(4,[[1,0],[1,2],[1,3]])
+    def dfs(self, board, i, j, word, k, visited):
+        if k == len(word): return True
+        if i - 1 >= 0 and not visited[i - 1][j]:
+            if word[k] == board[i - 1][j]:
+                visited[i - 1][j] = True
+                self.dfs(board, i - 1, j, word, k + 1, visited)
+        if i + 1 < len(board) and not visited[i + 1][j]:
+            if word[k] == board[i + 1][j]:
+                visited[i + 1][j] = True
+                self.dfs(board, i + 1, j, word, k + 1, visited)
+        if j - 1 >= 0 and not visited[i][j - 1]:
+            if word[k] == board[i][j - 1]:
+                visited[i][j - 1] = True
+                self.dfs(board, i, j - 1, word, k + 1, visited)
+        if j + 1 < len(board[i]) and not visited[i][j + 1]:
+            if word[k] == board[i][j + 1]:
+                visited[i][j + 1] = True
+                self.dfs(board, i, j + 1, word, k + 1, visited)
+        return False
+
+Solution().exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED")
