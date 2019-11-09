@@ -4,10 +4,39 @@ class TreeNode(object):
         self.val = x
         self.left = None
         self.right = None
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val, children):
+        self.val = val
+        self.children = children
+
 from collections import deque
 
 class Solution(object):
-    def levelOrder(self, root):
+    def levelOrder01(self, root):
+        """
+        :type root: Node
+        :rtype: List[List[int]]
+        """
+        q = deque()
+        
+        ans = []
+        if root:
+            q.append(root)
+        
+        while q:
+            levelsum = len(q)
+            levelnode = []
+            
+            for _ in range(levelsum):
+                node = q.popleft()
+                levelnode.append(node.val)
+                for child in node.children:
+                    q.append(child)
+            ans.append(levelnode)
+        return ans
+
+    def levelOrder00(self, root):
         """
         :type root: TreeNode
         :rtype: List[List[int]]
@@ -32,5 +61,4 @@ class Solution(object):
                     queue.append(node.right)
                 i -= 1
             ret.append(level)
-
         return ret
