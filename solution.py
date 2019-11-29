@@ -1,29 +1,25 @@
-class Solution:
-    def numDistinct(self, s: str, t: str) -> int:
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        divide = self.findDivide(nums)
+        try:
+            if target < nums[0]: return nums.index(target, divide, len(nums))
+            else: return nums.index(target, 0, divide + 1)
+        except:
+            return -1
 
-        
-        for ch in s: dic[ch] = 0
+    def findDivide(self, nums):
+        left = 0
+        right = len(nums) - 1
+        while left < right - 1:
+            mid = (left + right + 1) // 2
 
-        for ch in s: dic[ch] += 1
-        
-
-        kelist = dic.keys()
-        for i in range(1, len(dic)):
-
-            for j in range(i):
-                two = kelist[j] + kelist[i]
-                dic[two] += 1
-        
-        return self.countSeq(t, dic)
-        
-    def countSeq(self, t, dic):
-
-        if len(t) == 1 or len(t) == 2:
-            if dic[two]: return dic[t]
-            else: return 0
-        
-        return min(self.countSeq(t[1:], dic), self.countSeq(t[:-1], dic))
-
-ans = Solution().numDistinct("rabbbit", "rabbit")
-
-print(ans)
+            if nums[mid] <= nums[right] and nums[left] <= nums[mid]: return left
+            if nums[mid] <= nums[right]: right = mid
+            if nums[mid] >= nums[left]: left = mid
+        return left
+Solution().search([1],1)
