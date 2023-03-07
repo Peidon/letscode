@@ -10,7 +10,7 @@ class Solution(object):
         if len(intervals) > 0:
             merged.append(intervals[0])
         for interval in intervals:
-            if(merged[-1][-1] < interval[0]):
+            if merged[-1][-1] < interval[0]:
                 merged.append(interval)
             else:
                 merged[-1][-1] = max(merged[-1][-1], interval[-1])

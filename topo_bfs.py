@@ -1,5 +1,6 @@
 from collections import deque
 
+
 class Solution(object):
     def canFinish(self, numCourses, prerequisites):
         """
@@ -9,17 +10,17 @@ class Solution(object):
         """
         if not prerequisites: return True
 
-        indegree = [0] * numCourses # indegree
-        adj = [[] for _ in range(numCourses)] # adjacency set
-        
+        in_degree = [0] * numCourses  # in_degree
+        adj = [[] for _ in range(numCourses)]  # adjacency set
+
         for cur, pre in prerequisites:
-            indegree[cur] += 1
+            in_degree[cur] += 1
             adj[pre].append(cur)
         queue = deque()
         for i in range(numCourses):
-            if not indegree[i]:
+            if not in_degree[i]:
                 queue.append(i)
-        
+
         if not queue:
             return False
 
@@ -28,9 +29,10 @@ class Solution(object):
             numCourses -= 1
             while adj[vertex]:
                 adjacency = adj[vertex].pop()
-                indegree[adjacency] -= 1
-                if not indegree[adjacency]: queue.append(adjacency)
+                in_degree[adjacency] -= 1
+                if not in_degree[adjacency]: queue.append(adjacency)
 
         return not numCourses
 
-print(Solution().canFinish(3, [[1,0],[1,2]]))
+
+print(Solution().canFinish(3, [[1, 0], [1, 2]]))

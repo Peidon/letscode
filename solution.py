@@ -18,7 +18,7 @@ class Solution(object):
         while left < right - 1:
             mid = (left + right + 1) // 2
 
-            if nums[mid] <= nums[right] and nums[left] <= nums[mid]: return left
+            if nums[right] >= nums[mid] >= nums[left]: return left
             if nums[mid] <= nums[right]: right = mid
             if nums[mid] >= nums[left]: left = mid
         return left

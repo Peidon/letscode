@@ -1,10 +1,13 @@
 from collections import OrderedDict
+
+
 class LRUCache(OrderedDict):
 
     def __init__(self, capacity):
         """
         :type capacity: int
         """
+        super().__init__()
         self.capacity = capacity
 
     def get(self, key):
@@ -14,7 +17,7 @@ class LRUCache(OrderedDict):
         """
         if key not in self:
             return - 1
-        
+
         self.move_to_end(key)
         return self[key]
 
@@ -28,4 +31,4 @@ class LRUCache(OrderedDict):
             self.move_to_end(key)
         self[key] = value
         if len(self) > self.capacity:
-            self.popitem(last = False)
+            self.popitem(last=False)
