@@ -2,22 +2,22 @@ from collections import deque
 
 
 class Solution(object):
-    def canFinish(self, numCourses, prerequisites):
+    def canFinish(self, num_courses, prerequisites):
         """
-        :type numCourses: int
+        :type num_courses: int
         :type prerequisites: List[List[int]]
         :rtype: bool
         """
         if not prerequisites: return True
 
-        in_degree = [0] * numCourses  # in_degree
-        adj = [[] for _ in range(numCourses)]  # adjacency set
+        in_degree = [0] * num_courses  # in_degree
+        adj = [[] for _ in range(num_courses)]  # adjacency set
 
         for cur, pre in prerequisites:
             in_degree[cur] += 1
             adj[pre].append(cur)
         queue = deque()
-        for i in range(numCourses):
+        for i in range(num_courses):
             if not in_degree[i]:
                 queue.append(i)
 
@@ -26,13 +26,13 @@ class Solution(object):
 
         while queue:
             vertex = queue.popleft()
-            numCourses -= 1
+            num_courses -= 1
             while adj[vertex]:
                 adjacency = adj[vertex].pop()
                 in_degree[adjacency] -= 1
                 if not in_degree[adjacency]: queue.append(adjacency)
 
-        return not numCourses
+        return not num_courses
 
 
 print(Solution().canFinish(3, [[1, 0], [1, 2]]))
