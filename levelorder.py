@@ -56,7 +56,7 @@ def levelOrder00(root):
     while queue:
         level = []
         i = len(queue)
-        while (i > 0):
+        while i > 0:
             node = queue.popleft()
             level.append(node.val)
             if node.left:
@@ -88,7 +88,7 @@ def zigzagLevelOrder(root):
         i = len(queue)
 
         levelcount += 1
-        while (i > 0):
+        while i > 0:
             node = queue.popleft()
             level.append(node.val)
             if node.left:
