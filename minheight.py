@@ -15,23 +15,24 @@ def findMinHeight(n: int, edges):
     if not edges:
         return [0]
 
-    adj = [vertex() for _ in range(n)]
+    node = [vertex() for _ in range(n)]
 
     for out, ind in edges:
-        adj[ind].append(out)
-        adj[out].append(ind)
+        node[ind].append(out)
+        node[out].append(ind)
 
-    leaves = [x for x in range(n) if adj[x].in_degree == 1]
+    # leave index
+    leaves = [x for x in range(n) if node[x].in_degree == 1]
 
     while n > 2:
         n -= len(leaves)
         leaves_que = []
         for leaf in leaves:
 
-            c_idx = adj[leaf].pop_conjoin()
+            c_idx = node[leaf].pop_conjoin()
             # c_idx: conjoin vertex index
-            adj[c_idx].in_degree -= 1
-            if adj[c_idx].in_degree == 1:
+            node[c_idx].in_degree -= 1
+            if node[c_idx].in_degree == 1:
                 leaves_que.append(c_idx)
 
         leaves = leaves_que
@@ -66,11 +67,11 @@ def findMinHeightTrees(n: int, edges):
         leaves_que = []
         for leaf in leaves:
 
-            for vertex in adj[leaf]:
+            for adj_idx in adj[leaf]:
 
-                in_degree[vertex] -= 1
-                if in_degree[vertex] == 1:
-                    leaves_que.append(vertex)
+                in_degree[adj_idx] -= 1
+                if in_degree[adj_idx] == 1:
+                    leaves_que.append(adj_idx)
 
         leaves = leaves_que
         print(leaves)

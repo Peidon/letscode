@@ -27,11 +27,12 @@ class Solution(object):
                 if nums[tmin] < nums[down]:
                     nums[down] = nums[tmin]
                     down = tmin
-                else: break
+                else:
+                    break
             nums[down] = t
 
             bottom -= 1
-            
+
     def findKthLargest_(self, nums, k):
         """
         :type nums: List[int]
@@ -43,14 +44,16 @@ class Solution(object):
 
         while start < end:
             p = self.pivot(nums, start, end)
-            if p > k - 1: end = p - 1
-            elif p < k - 1: start = p + 1
-            else: break
+            if p > k - 1:
+                end = p - 1
+            elif p < k - 1:
+                start = p + 1
+            else:
+                break
         return nums[k - 1]
 
-
     def pivot(self, nums, start, end):
-        tmp =  nums[start]
+        tmp = nums[start]
         while start < end:
             while start < end and tmp >= nums[end]: end -= 1
             nums[start] = nums[end]
@@ -58,6 +61,7 @@ class Solution(object):
             nums[end] = nums[start]
         nums[start] = tmp
         return start
-        
-ans = Solution().findKthLargest([3,2,3,1,2,4,5,5,6], 3)
+
+
+ans = Solution().findKthLargest([3, 2, 3, 1, 2, 4, 5, 5, 6], 3)
 print(ans)
