@@ -82,12 +82,12 @@ def zigzagLevelOrder(root):
     else:
         return ret
 
-    levelcount = 0
+    level_count = 0
     while queue:
         level = []
         i = len(queue)
 
-        levelcount += 1
+        level_count += 1
         while i > 0:
             node = queue.popleft()
             level.append(node.val)
@@ -96,7 +96,7 @@ def zigzagLevelOrder(root):
             if node.right:
                 queue.append(node.right)
             i -= 1
-        if levelcount % 2:
+        if level_count % 2:
             ret.append(level)
         else:
             ret.append(level[::-1])

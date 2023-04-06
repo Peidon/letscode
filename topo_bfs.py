@@ -25,12 +25,13 @@ def canFinish(num_courses, prerequisites):
     :type prerequisites: List[List[int]]
     :rtype: bool
     """
-    if not prerequisites: return True
+    if not prerequisites:
+        return True
 
     g = graph(num_courses)
     g.build(prerequisites)
 
-    adj_list = g.node_list # adjacency list
+    adj_list = g.node_list  # adjacency list
 
     queue = deque()
     for v in adj_list:

@@ -41,10 +41,11 @@ class Solution:
    a 0  1  0  0  0  1  0
    g 0  0  0  1  0  0  1
 
-     b  a  b  g  b  a  g
-   b 1  1  2  2  3  3  3
-   a 1  1  1  1  1  4  4
-   g 1  1  1  1  1  4  5
+       b  a  b  g  b  a  g
+     0 1  1  1  1  1  1  1
+   b 0 1  1  2  2  3  3  3
+   a 0 0  1  1  1  1  4  4
+   g 0 0  0  0  1  1  1  5
 
         :param s:
         :param t:
