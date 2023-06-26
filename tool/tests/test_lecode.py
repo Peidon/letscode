@@ -1,11 +1,8 @@
-from argparse import Namespace
-
-from pkg import obj_storage
-from moo.model_tool import *
+from kmp import Solution as kmp_so
 import unittest
 
 
-class TestS3Methods(unittest.TestCase):
+class TestLetCode(unittest.TestCase):
     # def test_upper(self):
     #     self.assertEqual('foo'.upper(), 'FOO')
     #
@@ -20,10 +17,11 @@ class TestS3Methods(unittest.TestCase):
     #     with self.assertRaises(TypeError):
     #         s.split(2)
 
-    def test_bin(self):
-        bi = b'1656511831'
-        bis = str(bi)
-        print(type(bi), bis)
+    def test_kmp(self):
+        s = kmp_so()
+        idx = s.strStr("abcbbc", "bbc")
+        self.assertEqual(idx, 3)
+
 
 
 if __name__ == '__main__':

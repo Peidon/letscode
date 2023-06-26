@@ -15,6 +15,10 @@ class Solution(object):
     def minHeap(self, nums, k):
         bottom = k // 2 - 1
 
+        # 自低向上的下滤
+        # bottom 一开始在底部
+        # 随后逐渐向上
+        # 每次都下滤找出最小的值
         while bottom >= 0:
             down = bottom
             t = nums[bottom]

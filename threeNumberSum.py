@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Type
 
 
 class Solution:
@@ -6,15 +6,15 @@ class Solution:
     def __init__(self):
         self.func = _threeSum
 
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
+    def threeSum(self, nums: List[int]) -> List[Type[list]]:
         return self.func(nums)
 
 
-def _threeSum(nums: List[int]) -> List[List[int]]:
+def _threeSum(nums: List[int]) -> List[Type[list]]:
     three = [List[int]] * 0
 
     nums.sort()
-    d = {}
+    d = {}  # 用于去重
 
     for i, num in enumerate(nums):
         if num < 0:
@@ -34,7 +34,7 @@ def _threeSum(nums: List[int]) -> List[List[int]]:
     return three
 
 
-def _twoSum(nums: List[int], target) -> List[List[int]]:
+def _twoSum(nums: List[int], target) -> List[Type[list]]:
     if len(nums) < 2:
         return []
 
