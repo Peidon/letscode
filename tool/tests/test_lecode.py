@@ -21,7 +21,12 @@ class TestLetCode(unittest.TestCase):
         s = kmp_so()
         idx = s.strStr("abcbbc", "bbc")
         self.assertEqual(idx, 3)
-
+        idx = s.strStr("leetcode", "leeto")
+        self.assertEqual(idx, -1)
+        idx = s.strStr("aaa", "aaaa")
+        self.assertEqual(idx, -1)
+        idx = s.strStr("mississippi", "issipi")
+        self.assertEqual(idx, -1)
 
 
 if __name__ == '__main__':

@@ -44,4 +44,6 @@ class Solution:
                 i += 1
                 j += 1
 
+        if j < len(needle):
+            return -1
         return i - j
