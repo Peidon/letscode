@@ -1,4 +1,8 @@
 class Palindrome:
+    """
+    最长回文子串
+    """
+
 
     def __init__(self):
         self.result = ""
