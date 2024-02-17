@@ -297,27 +297,27 @@ def process(schema: str):
     spark = SparkSession.builder.appName("tfe_node_configs_tracking.cs").enableHiveSupport().getOrCreate()
 
     # query category & taskbot data frame
-    taskbotDF = spark.sql(category_taskbot_sql(schema))
+    taskbot_df = spark.sql(category_taskbot_sql(schema))
 
     # read flow table
-    flowDF = spark.sql(flow_sql(schema))
+    flow_df = spark.sql(flow_sql(schema))
 
     # flow join taskbot
-    flow_taskbot_join = flowDF. \
-        join(taskbotDF,
-             (taskbotDF.taskbot_id == flowDF.taskbot_id) & (taskbotDF.region == flowDF.region), "left"). \
-        drop(flowDF.taskbot_id). \
-        drop(flowDF.region)
+    flow_taskbot_join = flow_df. \
+        join(taskbot_df,
+             (taskbot_df.taskbot_id == flow_df.taskbot_id) & (taskbot_df.region == flow_df.region), "left"). \
+        drop(flow_df.taskbot_id). \
+        drop(flow_df.region)
 
     # read node table
-    nodeDF = spark.sql(node_sql(schema))
+    node_df = spark.sql(node_sql(schema))
 
     # node join flow_taskbot_join
-    tf_node = nodeDF. \
+    tf_node = node_df. \
         join(flow_taskbot_join,
-             (flow_taskbot_join.version_name == nodeDF.flow_id) & (flow_taskbot_join.region == nodeDF.region), "left"). \
-        drop(nodeDF.flow_id). \
-        drop(nodeDF.region)
+             (flow_taskbot_join.version_name == node_df.flow_id) & (flow_taskbot_join.region == node_df.region), "left"). \
+        drop(node_df.flow_id). \
+        drop(node_df.region)
 
     # target hive table
     target_hive_tab = "{0}.shopee_tfe_dwd_taskbot_node_content_df_reg".format(schema)
