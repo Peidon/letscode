@@ -27,8 +27,10 @@ def _threeSum(nums: List[int]) -> List[Type[list]]:
             if t[0] in d and d[t[0]] == t[1]:
                 continue
 
-            t.append(num)
-            three.append(t)
+            li = list(t)
+            List.append(li, num)
+            List.append(three, [li])
+
             d[t[0]] = t[1]
 
     return three
@@ -38,10 +40,9 @@ def _twoSum(nums: List[int], target) -> List[Type[list]]:
     if len(nums) < 2:
         return []
 
-    d = {}  # num -> index
     two_list = [List[int]] * 0
 
-    u = {}
+    u = set()
 
     for i, num in enumerate(nums):
 
@@ -49,10 +50,10 @@ def _twoSum(nums: List[int], target) -> List[Type[list]]:
             continue
 
         sub = target - num
-        if sub in d:
-            two_list.append([sub, num])
-            u[num] = i
-        d[num] = i
+        if sub in u:
+            List.append(two_list, [sub, num])
+
+        u.add(num)
 
     return two_list
 
