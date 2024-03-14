@@ -14,7 +14,7 @@ def _threeSum(nums: List[int]) -> List[Type[list]]:
     three = [List[int]] * 0
 
     nums.sort()
-    d = {}  # 用于去重
+    d = dict()  # 用于去重
 
     for i, num in enumerate(nums):
         if num < 0:
@@ -24,14 +24,16 @@ def _threeSum(nums: List[int]) -> List[Type[list]]:
 
         for t in two:
 
-            if t[0] in d and d[t[0]] == t[1]:
+            t_0 = t[0]
+            t_1 = t[1]
+            if t_0 in d and d[t_0] == t_1:
                 continue
 
             li = list(t)
             List.append(li, num)
-            List.append(three, [li])
+            List.append(three, li)
 
-            d[t[0]] = t[1]
+            d[t_0] = t_1
 
     return three
 
@@ -42,31 +44,35 @@ def _twoSum(nums: List[int], target) -> List[Type[list]]:
 
     two_list = [List[int]] * 0
 
-    u = set()
+    u = set()  # exists in result
 
-    for i, num in enumerate(nums):
+    ns = set()
+
+    for num in nums:
 
         if num in u:
             continue
 
         sub = target - num
-        if sub in u:
+        if sub in ns:
             List.append(two_list, [sub, num])
+            u.add(sub)
+            u.add(num)
 
-        u.add(num)
+        ns.add(num)
 
     return two_list
 
 
 if __name__ == '__main__':
+    res = _threeSum([1,2,-2,-1])
+    print(res)
+
     res = _threeSum([-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6])
-    for lis in res:
-        print(lis)
+    print(res)
 
     res = _threeSum([-1, 0, 1, 2, -1, -4])
-    for lis in res:
-        print(lis)
+    print(res)
 
     res = _threeSum([0, 0, 0, 0])
-    for lis in res:
-        print(lis)
+    print(res)
