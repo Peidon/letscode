@@ -538,3 +538,721 @@ answer_node_str = """
   }
 }
 """
+
+condition_json_str = '''
+[
+    {
+        "desc": {
+            "read_write_ctrl": 2,
+            "value": "Default"
+        },
+        "shadow_config": {
+            "read_write_ctrl": null,
+            "value": {
+                "is_default": true,
+                "case_id": "",
+                "condition_id": "condition_1"
+            }
+        },
+        "branch_rule": {
+            "read_write_ctrl": 2,
+            "value": {
+                "groups": [],
+                "logics": null
+            }
+        },
+        "branch_action": {
+            "read_write_ctrl": 2,
+            "value": "jump_node"
+        },
+        "jump_node": {
+            "read_write_ctrl": 2,
+            "value": {
+                "taskbot_id": "SOP15",
+                "next_node_id": "SOP15_Node22",
+                "port_id": "58e22d3c-f4f5-4c0b-9b67-1522f7f6c126"
+            }
+        },
+        "variate_assignment": {
+            "read_write_ctrl": 2,
+            "value": []
+        },
+        "show_condition": {
+            "read_write_ctrl": null,
+            "value": false
+        },
+        "node_template_id": "chatbot_system",
+        "advance_setting": {
+            "read_write_ctrl": null,
+            "value": {
+                "feedback": false,
+                "end_tag": false,
+                "follow_up": false,
+                "next_node": {
+                    "taskbot_id": "",
+                    "next_node_id": ""
+                },
+                "open_data_tracking": false,
+                "data_tracking": null,
+                "chat_with_seller": false,
+                "agent_case_id": 0
+            }
+        }
+    },
+    {
+        "desc": {
+            "read_write_ctrl": 2,
+            "value": "To Pay"
+        },
+        "shadow_config": {
+            "read_write_ctrl": 2,
+            "value": {
+                "is_default": false,
+                "case_id": "",
+                "condition_id": "condition_2"
+            }
+        },
+        "branch_rule": {
+            "read_write_ctrl": 2,
+            "value": {
+                "groups": [
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "1",
+                                        "render": "Buyer To Pay"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    }
+                ],
+                "logics": []
+            }
+        },
+        "branch_action": {
+            "read_write_ctrl": 2,
+            "value": "jump_node"
+        },
+        "jump_node": {
+            "read_write_ctrl": 2,
+            "value": {
+                "taskbot_id": "SOP15",
+                "next_node_id": "SOP15_Node28",
+                "port_id": "60563061-724c-4dfd-9888-c2e221bffb00"
+            }
+        },
+        "variate_assignment": {
+            "read_write_ctrl": 2,
+            "value": []
+        },
+        "show_condition": {
+            "read_write_ctrl": null,
+            "value": false
+        },
+        "node_template_id": "chatbot_system",
+        "advance_setting": {
+            "read_write_ctrl": null,
+            "value": {
+                "feedback": false,
+                "end_tag": false,
+                "follow_up": false,
+                "next_node": {
+                    "taskbot_id": "",
+                    "next_node_id": ""
+                },
+                "open_data_tracking": false,
+                "data_tracking": null,
+                "chat_with_seller": false,
+                "agent_case_id": 0
+            }
+        }
+    },
+    {
+        "desc": {
+            "read_write_ctrl": null,
+            "value": "To Ship"
+        },
+        "shadow_config": {
+            "read_write_ctrl": null,
+            "value": {
+                "is_default": false,
+                "case_id": "",
+                "condition_id": "condition_3"
+            }
+        },
+        "branch_rule": {
+            "read_write_ctrl": 2,
+            "value": {
+                "groups": [
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "2",
+                                        "render": "Buyer To Ship"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    },
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "4",
+                                        "render": "Buyer To Ship - Waiting pickup"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    }
+                ],
+                "logics": [
+                    2
+                ]
+            }
+        },
+        "branch_action": {
+            "read_write_ctrl": 2,
+            "value": "jump_node"
+        },
+        "jump_node": {
+            "read_write_ctrl": 2,
+            "value": {
+                "taskbot_id": "SOP15",
+                "next_node_id": "SOP15_Node44",
+                "port_id": "73bc8e21-53f2-4977-8d13-62cf090806f8"
+            }
+        },
+        "variate_assignment": {
+            "read_write_ctrl": 2,
+            "value": []
+        },
+        "show_condition": {
+            "read_write_ctrl": null,
+            "value": false
+        },
+        "node_template_id": "chatbot_system",
+        "advance_setting": {
+            "read_write_ctrl": null,
+            "value": {
+                "feedback": false,
+                "end_tag": false,
+                "follow_up": false,
+                "next_node": {
+                    "taskbot_id": "",
+                    "next_node_id": ""
+                },
+                "open_data_tracking": false,
+                "data_tracking": null,
+                "chat_with_seller": false,
+                "agent_case_id": 0
+            }
+        }
+    },
+    {
+        "desc": {
+            "read_write_ctrl": null,
+            "value": "To Receive"
+        },
+        "shadow_config": {
+            "read_write_ctrl": null,
+            "value": {
+                "is_default": false,
+                "case_id": "",
+                "condition_id": "condition_4"
+            }
+        },
+        "branch_rule": {
+            "read_write_ctrl": 2,
+            "value": {
+                "groups": [
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "3",
+                                        "render": "Buyer To Receive - Shipped Non-Integrated"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    },
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "5",
+                                        "render": "Buyer To Receive - Shipped Integrated"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    },
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "6",
+                                        "render": "Buyer To Receive - Delivered Integrated"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    }
+                ],
+                "logics": [
+                    2,
+                    2
+                ]
+            }
+        },
+        "branch_action": {
+            "read_write_ctrl": 2,
+            "value": "jump_node"
+        },
+        "jump_node": {
+            "read_write_ctrl": 2,
+            "value": {
+                "taskbot_id": "SOP15",
+                "next_node_id": "SOP15_Node23",
+                "port_id": "912ecc66-63d3-43d7-84c9-6fdf80c438b4"
+            }
+        },
+        "variate_assignment": {
+            "read_write_ctrl": 2,
+            "value": []
+        },
+        "show_condition": {
+            "read_write_ctrl": null,
+            "value": false
+        },
+        "node_template_id": "chatbot_system",
+        "advance_setting": {
+            "read_write_ctrl": null,
+            "value": {
+                "feedback": false,
+                "end_tag": false,
+                "follow_up": false,
+                "next_node": {
+                    "taskbot_id": "",
+                    "next_node_id": ""
+                },
+                "open_data_tracking": false,
+                "data_tracking": null,
+                "chat_with_seller": false,
+                "agent_case_id": 0
+            }
+        }
+    },
+    {
+        "desc": {
+            "read_write_ctrl": null,
+            "value": "Completed"
+        },
+        "shadow_config": {
+            "read_write_ctrl": null,
+            "value": {
+                "is_default": false,
+                "case_id": "",
+                "condition_id": "condition_5"
+            }
+        },
+        "branch_rule": {
+            "read_write_ctrl": 2,
+            "value": {
+                "groups": [
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "7",
+                                        "render": "Buyer Completed"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    }
+                ],
+                "logics": []
+            }
+        },
+        "branch_action": {
+            "read_write_ctrl": 2,
+            "value": "jump_node"
+        },
+        "jump_node": {
+            "read_write_ctrl": 2,
+            "value": {
+                "taskbot_id": "SOP10",
+                "next_node_id": "SOP10_Node32",
+                "port_id": "ca12284e-8b63-43d9-869d-f8c5bb12ec8d"
+            }
+        },
+        "variate_assignment": {
+            "read_write_ctrl": 2,
+            "value": []
+        },
+        "show_condition": {
+            "read_write_ctrl": null,
+            "value": false
+        },
+        "node_template_id": "chatbot_system",
+        "advance_setting": {
+            "read_write_ctrl": null,
+            "value": {
+                "feedback": false,
+                "end_tag": false,
+                "follow_up": false,
+                "next_node": {
+                    "taskbot_id": "",
+                    "next_node_id": ""
+                },
+                "open_data_tracking": false,
+                "data_tracking": null,
+                "chat_with_seller": false,
+                "agent_case_id": 0
+            }
+        }
+    },
+    {
+        "desc": {
+            "read_write_ctrl": null,
+            "value": "Cancelled"
+        },
+        "shadow_config": {
+            "read_write_ctrl": null,
+            "value": {
+                "is_default": false,
+                "case_id": "",
+                "condition_id": "condition_6"
+            }
+        },
+        "branch_rule": {
+            "read_write_ctrl": 2,
+            "value": {
+                "groups": [
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "8",
+                                        "render": "Buyer Cancelled"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    }
+                ],
+                "logics": []
+            }
+        },
+        "branch_action": {
+            "read_write_ctrl": 2,
+            "value": "jump_node"
+        },
+        "jump_node": {
+            "read_write_ctrl": 2,
+            "value": {
+                "taskbot_id": "SOP15",
+                "next_node_id": "SOP15_Node26",
+                "port_id": "80b5dd55-5261-43d0-b526-236f90f17a30"
+            }
+        },
+        "variate_assignment": {
+            "read_write_ctrl": 2,
+            "value": []
+        },
+        "show_condition": {
+            "read_write_ctrl": null,
+            "value": false
+        },
+        "node_template_id": "chatbot_system",
+        "advance_setting": {
+            "read_write_ctrl": null,
+            "value": {
+                "feedback": false,
+                "end_tag": false,
+                "follow_up": false,
+                "next_node": {
+                    "taskbot_id": "",
+                    "next_node_id": ""
+                },
+                "open_data_tracking": false,
+                "data_tracking": null,
+                "chat_with_seller": false,
+                "agent_case_id": 0
+            }
+        }
+    },
+    {
+        "desc": {
+            "read_write_ctrl": null,
+            "value": "Return/Refund"
+        },
+        "shadow_config": {
+            "read_write_ctrl": null,
+            "value": {
+                "is_default": false,
+                "case_id": "",
+                "condition_id": "condition_7"
+            }
+        },
+        "branch_rule": {
+            "read_write_ctrl": 2,
+            "value": {
+                "groups": [
+                    {
+                        "rules": [
+                            {
+                                "variables": [
+                                    {
+                                        "source_type": 7,
+                                        "value": "API",
+                                        "render": "API"
+                                    },
+                                    {
+                                        "source_type": 1,
+                                        "value": "get_order_info_by_order_id.chatbot_order_status",
+                                        "api_id": "get_order_info_by_order_id",
+                                        "render": "Chatbot order status",
+                                        "api_name": "getOrderInfoByOrderId"
+                                    },
+                                    {
+                                        "value": "options",
+                                        "render": "Options"
+                                    },
+                                    {
+                                        "source_type": 3,
+                                        "value": "9",
+                                        "render": "Buyer Return Refund"
+                                    }
+                                ],
+                                "operators": [
+                                    "10"
+                                ]
+                            }
+                        ],
+                        "logics": []
+                    }
+                ],
+                "logics": []
+            }
+        },
+        "branch_action": {
+            "read_write_ctrl": 2,
+            "value": "jump_node"
+        },
+        "jump_node": {
+            "read_write_ctrl": 2,
+            "value": {
+                "taskbot_id": "SOP15",
+                "next_node_id": "SOP15_Node25",
+                "port_id": "35c0bf82-6a15-468a-9d86-44f543ed74d4"
+            }
+        },
+        "variate_assignment": {
+            "read_write_ctrl": 2,
+            "value": []
+        },
+        "show_condition": {
+            "read_write_ctrl": null,
+            "value": false
+        },
+        "node_template_id": "chatbot_system",
+        "advance_setting": {
+            "read_write_ctrl": null,
+            "value": {
+                "feedback": false,
+                "end_tag": false,
+                "follow_up": false,
+                "next_node": {
+                    "taskbot_id": "",
+                    "next_node_id": ""
+                },
+                "open_data_tracking": false,
+                "data_tracking": null,
+                "chat_with_seller": false,
+                "agent_case_id": 0
+            }
+        }
+    }
+]'''

@@ -2,3 +2,4 @@
 solution.py
 .idea/
 venv/
+*.proto

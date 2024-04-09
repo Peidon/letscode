@@ -1,11 +1,13 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import ArrayType, StructType, StringType, StructField, MapType
 from pyspark.sql.functions \
-    import udf, split, explode, upper, element_at, concat_ws, regexp_replace, collect_list, array_distinct
+    import udf, split, explode, upper, element_at, concat_ws, regexp_replace, collect_list, array_distinct, array_remove
 
 from .common import *
+from .descriptor import condition_description, filter_description
 
 import logging
+from datetime import datetime
 
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
@@ -36,43 +38,6 @@ b_id_path = {
     2: "$.shadow_config.value.condition_id",  # condition node
     3: "$.shadow_config.value.case_id",  # answer node
 }
-
-
-def used_variables(groups: object) -> dict:
-    if not groups:
-        return {}
-
-    if not isinstance(groups, list):
-        logger.info("branch_rule.value.groups", type(groups))
-        return {}
-
-    used = dict()
-    for group in groups:
-
-        if "rules" not in group:
-            continue
-        rules = group.get("rules")
-        for rule in rules:
-            variables = rule.get("variables")
-            if not variables:
-                continue
-
-            for v in variables:
-                if not isinstance(v, dict):
-                    continue
-
-                s_type = v.get("source_type")
-                if not s_type:
-                    continue
-
-                # variable source type
-                if int(s_type) not in [1, 2, 6]:
-                    continue
-                k = v.get("value")
-                if k:
-                    used[k] = v.get("render")
-
-    return used
 
 
 def branch_id(b: object, node_type: int) -> str:
@@ -109,9 +74,20 @@ def extract_context(c_rdd):
                     not isinstance(va, float) and \
                     not isinstance(va, bool):
                 continue
-            conditions.append(str(v_name) + "=" + str(va))
 
-    condition_expr = " and ".join(conditions)
+            va_str = str(va)
+            if isinstance(va, int) and ('date' in v_name or 'time' in v_name):
+                dt_object = datetime.fromtimestamp(va)
+                va_str = dt_object.strftime('%d-%m-%Y')
+
+            conditions.append(str(v_name) + "=" + va_str)
+
+    condition_expr = c_rdd.condition_rule.strip()
+    if len(conditions) > 0 and condition_expr != "":
+        condition_expr += ", " + ", ".join(conditions)
+
+    if condition_expr == "":
+        condition_expr = ", ".join(conditions)
 
     return (c_rdd.region,
             c_rdd.trace_id,
@@ -143,9 +119,12 @@ def extract_branches(b_rdd):
         b_name = node_id + "/" + b_id
 
         groups = get_value_by_path(b, "$.branch_rule.value.groups")
-        used_v = used_variables(groups)
+        if not isinstance(groups, list):
+            continue
 
-        c_rule = "()"
+        ds = condition_description(list(groups))
+        c_rule, used_v = filter_description(ds)
+
         b_list.append({
             "branch_name": b_name,
             "used_variates": used_v,
@@ -241,13 +220,17 @@ def process(schema: str):
         StructField("condition_expr", StringType(), True),
     ])
     result_df = c_rdd.toDF(schema=c_schema)
+
+    condition_ctx = "condition_context"
     result_df = result_df. \
         groupBy("region", "session_id", "dialogue_id", "answer_node_point"). \
-        agg(collect_list(result_df.condition_expr).alias("condition_context"))
+        agg(collect_list(result_df.condition_expr).alias(condition_ctx))
 
     target_hive_tab = "{0}.shopee_tfe_dwd_taskbot_llm_context_df__reg_live".format(schema)
 
-    result_df.write. \
+    result_df.select("region", "session_id", "dialogue_id", "answer_node_point",
+                     array_distinct(array_remove(result_df.condition_context, "")).alias(condition_ctx)).\
+        write. \
         mode("overwrite"). \
         partitionBy("region"). \
         saveAsTable(target_hive_tab)
