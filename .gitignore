@@ -3,3 +3,4 @@ solution.py
 .idea/
 venv/
 *.proto
+*.zip

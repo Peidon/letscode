@@ -23,6 +23,10 @@ def range_find(data: str, prefix: str, suffix: str) -> str:
     return data[start_index + len(prefix): end_index]
 
 
+def str_list(data: str) -> list:
+    return data.split(",")
+
+
 import json
 
 
@@ -44,11 +48,12 @@ def extract_dialogue_states(log_data: rdd) -> tuple:
     reg_ = prefix_find(data, 'Region:', 2)
     s_id = prefix_find(data, 'session=', len('1209602234582438784'))
     node = range_find(data, 'reply=', ',buttons=')
-    buttons = json_list(range_find(data, 'buttons=', ',conditions='))
-    c_lis = json_list(range_find(data,'conditions=', ',rounds='))
+    buttons = str_list(range_find(data, 'buttons=[', '],conditions='))
+    c_lis = str_list(range_find(data, 'conditions=[', '],rounds='))
     r_lis = json_list(prefix_find(data, 'rounds=', -1))
     i_id = range_find(data, 'instance=', ',session')
     t_id = prefix_find(data, 'TraceId:', len('5134483e108512de5f96bada924e1a02'))
+    time_st = log_data["_timestamp"]
     dt = log_data["dt"]
 
     return (reg_,
@@ -59,6 +64,7 @@ def extract_dialogue_states(log_data: rdd) -> tuple:
             r_lis,
             i_id,
             t_id,
+            int(time_st),
             dt)
 
 
@@ -81,7 +87,8 @@ def process(schema: str):
         )),
         StructField("instance_id", StringType(), True),  # component service instance id
         StructField("trace_id", StringType()),
-        StructField("create_time", StringType())
+        StructField("timestamp", IntegerType()),
+        StructField("_date", StringType())
     ])
 
     target_rdd = df.rdd.map(extract_dialogue_states)
