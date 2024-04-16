@@ -40,32 +40,25 @@ def json_list(data: str) -> list:
     return a
 
 
-def extract_dialogue_states(log_data: rdd) -> tuple:
+def extract_dialogue_states(log_data: rdd) -> [tuple]:
     data = log_data["value"]
     if not isinstance(data, str):
-        return ()
+        return []
 
-    reg_ = prefix_find(data, 'Region:', 2)
-    s_id = prefix_find(data, 'session=', len('1209602234582438784'))
-    node = range_find(data, 'reply=', ',buttons=')
-    buttons = str_list(range_find(data, 'buttons=[', '],conditions='))
-    c_lis = str_list(range_find(data, 'conditions=[', '],rounds='))
-    r_lis = json_list(prefix_find(data, 'rounds=', -1))
-    i_id = range_find(data, 'instance=', ',session')
-    t_id = prefix_find(data, 'TraceId:', len('5134483e108512de5f96bada924e1a02'))
-    time_st = log_data["_timestamp"]
-    dt = log_data["dt"]
+    lines = data.split("answer_rewriter")
 
-    return (reg_,
-            s_id,
-            node,
-            buttons,
-            c_lis,
-            r_lis,
-            i_id,
-            t_id,
-            int(time_st),
-            dt)
+    return list(map(lambda item: (
+        prefix_find(item, 'Region:', 2),
+        prefix_find(item, 'session=', len('1209602234582438784')),
+        range_find(item, 'reply=', ',buttons='),
+        str_list(range_find(item, 'buttons=[', '],conditions=')),
+        str_list(range_find(item, 'conditions=[', '],rounds=')),
+        json_list(prefix_find(item, 'rounds=', -1)),
+        range_find(item, 'instance=', ',session'),
+        prefix_find(item, 'TraceId:', len('5134483e108512de5f96bada924e1a02')),
+        int(log_data["_timestamp"]),
+        log_data["dt"],
+    ), lines))
 
 
 def process(schema: str):
@@ -91,7 +84,7 @@ def process(schema: str):
         StructField("_date", StringType())
     ])
 
-    target_rdd = df.rdd.map(extract_dialogue_states)
+    target_rdd = df.rdd.flatMap(extract_dialogue_states)
     result = target_rdd.toDF(schema=target_schema)
 
     target_hive_tab = "{0}.shopee_tfe_dwd_taskbot_llm_dataset_df__reg_live".format(schema)
