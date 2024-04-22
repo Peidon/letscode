@@ -72,7 +72,7 @@ def extract_dialogue_states(log_data: rdd) -> [tuple]:
             range_find(item, 'reply=', ',buttons='),
             str_list(range_find(item, 'buttons=[', '],conditions=')),
             str_list(range_find(item, 'conditions=[', '],rounds=')),
-            json_list(prefix_find(item, 'rounds=', -1)),
+            json_list(range_find(item, 'rounds=', ',path=')),
             range_find(item, 'instance=', ',session'),
             prefix_find(item, 'TraceId:', len('5134483e108512de5f96bada924e1a02')),
             int(log_data["_timestamp"]),
