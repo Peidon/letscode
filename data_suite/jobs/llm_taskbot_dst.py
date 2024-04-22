@@ -40,6 +40,18 @@ def json_list(data: str) -> list:
     return a
 
 
+def last_node_point(path: list) -> str:
+    if len(path) <= 0:
+        return ''
+    last = path[len(path) - 1]
+    if not isinstance(last, dict):
+        return ''
+    node_id = last.get('NodeID')
+    branch_id = last.get('Branch')
+    point_id = '{0}_{1}'.format(node_id, branch_id)
+    return point_id.upper()
+
+
 def extract_dialogue_states(log_data: rdd) -> [tuple]:
     data = log_data["value"]
     if not isinstance(data, str):
@@ -47,18 +59,23 @@ def extract_dialogue_states(log_data: rdd) -> [tuple]:
 
     lines = data.split("answer_rewriter")
 
-    return list(map(lambda item: (
-        prefix_find(item, 'Region:', 2),
-        prefix_find(item, 'session=', len('1209602234582438784')),
-        range_find(item, 'reply=', ',buttons='),
-        str_list(range_find(item, 'buttons=[', '],conditions=')),
-        str_list(range_find(item, 'conditions=[', '],rounds=')),
-        json_list(prefix_find(item, 'rounds=', -1)),
-        range_find(item, 'instance=', ',session'),
-        prefix_find(item, 'TraceId:', len('5134483e108512de5f96bada924e1a02')),
-        int(log_data["_timestamp"]),
-        log_data["dt"],
-    ), lines))
+    return filter(
+        lambda x: x[2] != "" and x[3] != "",
+        list(map(lambda item: (
+            prefix_find(item, 'Region:', 2),
+            prefix_find(item, 'session=', len('1209602234582438784')),
+            prefix_find(item, 'dialogue id=', len('1227803051888802816')),
+            last_node_point(json_list(range_find(item, 'path=', ',dialogue id='))),
+            range_find(item, 'reply=', ',buttons='),
+            str_list(range_find(item, 'buttons=[', '],conditions=')),
+            str_list(range_find(item, 'conditions=[', '],rounds=')),
+            json_list(prefix_find(item, 'rounds=', -1)),
+            range_find(item, 'instance=', ',session'),
+            prefix_find(item, 'TraceId:', len('5134483e108512de5f96bada924e1a02')),
+            int(log_data["_timestamp"]),
+            log_data["dt"],
+        ), lines))
+    )
 
 
 def process(schema: str):
@@ -69,6 +86,8 @@ def process(schema: str):
     target_schema = StructType([
         StructField("region", StringType()),
         StructField("session_id", StringType()),
+        StructField("dialogue_id", StringType()),
+        StructField("node_point_id", StringType()),
         StructField("node_content", StringType(), True),
         StructField("buttons", ArrayType(StringType()), True),
         StructField("condition_list", ArrayType(StringType()), True),
