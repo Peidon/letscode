@@ -41,6 +41,9 @@ def json_list(data: str) -> list:
 
 
 def last_node_point(path: list) -> str:
+    if not path:
+        return ''
+
     if len(path) <= 0:
         return ''
     last = path[len(path) - 1]
