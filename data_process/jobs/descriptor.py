@@ -138,8 +138,8 @@ logical_opt_map = {
     2: "or",
 }
 
-# from data_suite.jobs.data_examples import condition_json_str
-# from data_suite.jobs.common import get_value_by_path
+# from data_process.jobs.data_examples import condition_json_str
+# from data_process.jobs.common import get_value_by_path
 # import json
 #
 # if __name__ == '__main__':

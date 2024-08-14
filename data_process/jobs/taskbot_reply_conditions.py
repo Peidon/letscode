@@ -10,22 +10,22 @@ import logging
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
-# from data_suite.jobs.common import *
+# from data_process.jobs.common import *
 from .common import *
 
-variate_data_op = {
-    1: lambda v: v['int_val'],
-    2: lambda v: v['float_val'],
-    3: lambda v: v['string_val'],
-    4: lambda v: v['bool_val'],
-    5: lambda v: v['struct_val'],
-    6: lambda v: v['struct_val'],
-    7: lambda v: v['struct_val'],
-    8: lambda v: v['string_val'],
-    9: lambda v: v['int_val'],
-    10: lambda v: v['string_val'],
-    11: lambda v: v['struct_val'],
-    12: lambda v: v['array_val']
+variate_data = {
+    1: 'int_val',
+    2: 'float_val',
+    3: 'string_val',
+    4: 'bool_val',
+    5: 'struct_val',
+    6: 'struct_val',
+    7: 'struct_val',
+    8: 'string_val',
+    9: 'int_val',
+    10: 'string_val',
+    11: 'struct_val',
+    12: 'array_val'
 }
 
 
@@ -47,9 +47,9 @@ def variates_info(x: str) -> str:
             continue
 
         data_type = va['type']
-        op = variate_data_op.get(data_type)
-        if op:
-            m[k] = op(va)
+        field = variate_data.get(data_type)
+        if field in va:
+            m[k] = va[field]
         else:
             m[k] = None
 
@@ -76,15 +76,19 @@ def track_nodes(x: str) -> dict:
     msgs = get_json_obj(x, "$.msgs")
     node_point_id = ""
     has_end = False
-    for msg in list(msgs):
 
-        is_end = get_value_by_path(msg, "$.is_end")
-        if bool(is_end):
-            has_end = True
+    if isinstance(msgs, list):
+        for msg in list(msgs):
 
-        msg_config = get_value_by_path(msg, "$.msg_config")
-        config_json_str = str(msg_config).replace("\\", "")
-        if is_json(config_json_str):
+            is_end = get_value_by_path(msg, "$.is_end")
+            if bool(is_end):
+                has_end = True
+
+            msg_config = get_value_by_path(msg, "$.msg_config")
+            config_json_str = str(msg_config).replace("\\", "")
+            if not is_json(config_json_str):
+                continue
+
             np = get_json_obj(config_json_str, "$.node_point_id")
             if np:
                 node_point_id = np
@@ -121,6 +125,8 @@ def extract_trace_id(line: str) -> str:
 def extract_bot_id(line: str) -> int:
     pattern = r"BotID:(\d+)"
     match = re.search(pattern, line)
+    if not match:
+        return 0
     group = match.group()
     if len(group) > 0:
         gs = group.split(":")
@@ -208,7 +214,7 @@ def process(schema: str):
 
     # select log info
     log_info_data = spark.sql('''select * from {0}.log_data_taskbot_reply__reg_continuous_s0_live where 
-UNIX_TIMESTAMP(_timestamp) = date_sub(UNIX_TIMESTAMP(), 1, 'day')'''.format(schema))
+from_unixtime(_timestamp, 'yyyy-MM-dd') = date_sub(current_timestamp(), 1)'''.format(schema))
 
     # target hive table
     target_hive_tab = "{0}.shopee_tfe_dwd_taskbot_reply_conditions_df_reg_live".format(schema)
