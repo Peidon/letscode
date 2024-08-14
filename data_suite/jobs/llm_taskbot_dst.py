@@ -40,6 +40,77 @@ def json_list(data: str) -> list:
     return a
 
 
+def extract_context_data(report_data: rdd) -> tuple:
+    """
+    extract from json string
+    :param report_data:
+    :return:
+    """
+
+    data = report_data["value"]
+    if not isinstance(data, str):
+        return ()
+    try:
+        a = json.loads(data)
+        if not isinstance(a, dict):
+            return ()
+
+    except json.JSONDecodeError:
+        return ()
+
+    path = a.get("flow_paths")
+
+    reg_ = a.get("region")
+    b_id = a.get("bot_id")
+    s_id = a.get("session_id")
+    d_id = a.get("dialogue_id")
+    n_id = last_node_point(path)
+    node = a.get("node_content")
+    butt = a.get("buttons")
+    c_ls = a.get("conditions")
+    r_ls = a.get("history_rounds")
+    i_id = a.get("instance_id")
+    t_id = a.get("trace_id")
+    r_no = a.get("round_number")
+    dat_ = report_data["dt"]
+
+    return (reg_,
+            b_id,
+            s_id,
+            d_id,
+            n_id,
+            node,
+            butt,
+            c_ls,
+            r_ls,
+            i_id,
+            t_id,
+            r_no,
+            dat_)
+
+
+target_schema = StructType([
+        StructField("region", StringType()),
+        StructField("bot_id", IntegerType()),
+        StructField("session_id", StringType()),
+        StructField("dialogue_id", StringType()),
+        StructField("node_point_id", StringType()),
+        StructField("node_content", StringType(), True),
+        StructField("buttons", ArrayType(StringType()), True),
+        StructField("condition_list", ArrayType(StringType()), True),
+        StructField("session_rounds", ArrayType(StructType([
+            StructField("utterance", StringType(), True),
+            StructField("create_method", StringType(), True),
+            StructField("answer_list", ArrayType(StringType())),
+        ])
+        )),
+        StructField("instance_id", StringType(), True),  # component service instance id
+        StructField("trace_id", StringType()),
+        StructField("timestamp", IntegerType()),
+        StructField("_date", StringType())
+    ])
+
+
 def last_node_point(path: list) -> str:
     if not path:
         return ''
@@ -86,27 +157,7 @@ def process(schema: str):
     df = spark.sql('''select * from {0}.log_data_taskbot_reply__reg_continuous_s0_live where from_unixtime(
     _timestamp, 'yyyy-MM-dd') = date_sub(current_timestamp(), 1)'''.format(schema))
 
-    target_schema = StructType([
-        StructField("region", StringType()),
-        StructField("session_id", StringType()),
-        StructField("dialogue_id", StringType()),
-        StructField("node_point_id", StringType()),
-        StructField("node_content", StringType(), True),
-        StructField("buttons", ArrayType(StringType()), True),
-        StructField("condition_list", ArrayType(StringType()), True),
-        StructField("session_rounds", ArrayType(StructType([
-            StructField("utterance", StringType(), True),
-            StructField("create_method", StringType(), True),
-            StructField("answer_list", ArrayType(StringType())),
-        ])
-        )),
-        StructField("instance_id", StringType(), True),  # component service instance id
-        StructField("trace_id", StringType()),
-        StructField("timestamp", IntegerType()),
-        StructField("_date", StringType())
-    ])
-
-    target_rdd = df.rdd.flatMap(extract_dialogue_states)
+    target_rdd = df.rdd.flatMap(extract_context_data)
     result = target_rdd.toDF(schema=target_schema)
 
     target_hive_tab = "{0}.shopee_tfe_dwd_taskbot_llm_dataset_df__reg_live".format(schema)
