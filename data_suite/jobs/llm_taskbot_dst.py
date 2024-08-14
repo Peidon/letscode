@@ -153,7 +153,7 @@ def extract_dialogue_states(log_data: rdd) -> [tuple]:
 
 
 def process(schema: str):
-    spark = SparkSession.builder.appName("chatbot.tfe.taskbot.dst").enableHiveSupport().getOrCreate()
+    spark = SparkSession.builder.appName("chatbot.llm.taskbot.datasource").enableHiveSupport().getOrCreate()
     df = spark.sql('''select * from {0}.log_data_taskbot_reply__reg_continuous_s0_live where from_unixtime(
     _timestamp, 'yyyy-MM-dd') = date_sub(current_timestamp(), 1)'''.format(schema))
 
