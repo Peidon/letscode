@@ -69,9 +69,10 @@ def extract_context_data(report_data: rdd) -> tuple:
     butt = a.get("buttons")
     c_ls = a.get("conditions")
     r_ls = a.get("history_rounds")
+    r_no = a.get("round_number")
     i_id = a.get("instance_id")
     t_id = a.get("trace_id")
-    r_no = a.get("round_number")
+    t_st = int(report_data["_timestamp"])
     dat_ = report_data["dt"]
 
     return (reg_,
@@ -83,9 +84,10 @@ def extract_context_data(report_data: rdd) -> tuple:
             butt,
             c_ls,
             r_ls,
+            r_no,
             i_id,
             t_id,
-            r_no,
+            t_st,
             dat_)
 
 
@@ -104,6 +106,7 @@ target_schema = StructType([
             StructField("answer_list", ArrayType(StringType())),
         ])
         )),
+        StructField("round", IntegerType()),
         StructField("instance_id", StringType(), True),  # component service instance id
         StructField("trace_id", StringType()),
         StructField("timestamp", IntegerType()),
@@ -155,7 +158,8 @@ def extract_dialogue_states(log_data: rdd) -> [tuple]:
 def process(schema: str):
     spark = SparkSession.builder.appName("chatbot.llm.taskbot.datasource").enableHiveSupport().getOrCreate()
     df = spark.sql('''select * from {0}.log_data_taskbot_reply__reg_continuous_s0_live where from_unixtime(
-    _timestamp, 'yyyy-MM-dd') = date_sub(current_timestamp(), 1)'''.format(schema))
+    _timestamp, 'yyyy-MM-dd') > date_sub(current_timestamp(), 7) and from_unixtime(
+    _timestamp, 'yyyy-MM-dd') < date_sub(current_timestamp(), 1)'''.format(schema))
 
     target_rdd = df.rdd.flatMap(extract_context_data)
     result = target_rdd.toDF(schema=target_schema)
@@ -163,7 +167,7 @@ def process(schema: str):
     target_hive_tab = "{0}.shopee_tfe_dwd_taskbot_llm_dataset_df__reg_live".format(schema)
 
     result.write. \
-        mode("append"). \
+        mode("overwrite"). \
         partitionBy("region"). \
         saveAsTable(target_hive_tab)
 
