@@ -39,7 +39,54 @@ def _next_start(nums: List[int], i: int, tail: int) -> int:
     return end
 
 
+class Jumper(object):
+
+    def __init__(self, a: [int]):
+        if a is None:
+            a = []
+        self.position = 0
+        self.step = 0
+        self.road = a
+
+    def to_end(self):
+        a = self.road[self.position]
+        if a + self.position >= len(self.road) - 1:
+            return True
+        return False
+
+    def to_next_position(self):
+        a = self.road[self.position]
+        m = 0
+        p = self.position
+        for i in range(p+1, p+a+1):
+            if i + self.road[i] > m:
+                self.position = i
+                m = i + self.road[i]
+        self.step += 1
+
+    def min_step(self):
+        if self.position + 1 == len(self.road):
+            return self.step
+        return self.step + 1
+
+
+class Solution(object):
+    def jump(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        j = Jumper(nums)
+        while not j.to_end():
+            j.to_next_position()
+        return j.min_step()
+
+
 if __name__ == '__main__':
+
+    steps = Solution().jump([1,2,3])
+    print(steps)
+
     steps = jump([5, 9, 3, 2, 1, 0, 2, 3, 3, 1, 0, 0])
     print(steps)
 
