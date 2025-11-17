@@ -13,29 +13,29 @@ class Solution:
 
         head_reverse = left <= 1
 
-        left_link = ListNode(0)
-        left_link.next = ListNode(0)
-        left_link.next.next = head
-        while left_link and left > 0:
-            left_link = left_link.next
+        dummy = ListNode()
+        dummy.next = ListNode()
+        dummy.next.next = head
+        while dummy and left > 0:
+            dummy = dummy.next
             left -= 1
             right -= 1
 
-        right_end = left_link.next
-        if not right_end or not right_end.next:
+        begin = dummy.next
+        if not begin or not begin.next:
             return head
 
-        prior = right_end
-        while right_end.next and right > 0:
+        prior = begin
+        while begin.next and right > 0:
             right -= 1
-            reverse = right_end.next
-            right_end.next = reverse.next
+            reverse = begin.next
+            begin.next = reverse.next
             reverse.next = prior
             prior = reverse
-        left_link.next = prior
+        dummy.next = prior
 
         if head_reverse:
-            return left_link.next
+            return dummy.next
 
         return head
 
