@@ -1,4 +1,4 @@
-def _build_next(needle: str) -> [int]:
+def _build_next(needle: str) -> list[int]:
     """
     next[i] 代表 needle[0:i] 中最长公共前后缀
     当 needle[i] 失配时 即在下一个位置回溯到 needle[next[i]] 重新开始匹配
@@ -34,7 +34,7 @@ def _build_next(needle: str) -> [int]:
 
 class Solution:
 
-    def strStr(self, haystack: str, needle: str) -> int:
+    def str_index(self, haystack: str, needle: str) -> int:
         nex = _build_next(needle)
         i = j = 0
         while i < len(haystack) and j < len(needle):
