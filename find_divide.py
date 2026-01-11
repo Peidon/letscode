@@ -25,5 +25,5 @@ def search(nums, target):
     except:
         return -1
 
-
-search([1], 1)
+if __name__ == '__main__':
+    search([1], 1)

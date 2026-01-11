@@ -1,5 +1,4 @@
 .vscode/
-solution.py
 .idea/
 venv/
 *.proto
