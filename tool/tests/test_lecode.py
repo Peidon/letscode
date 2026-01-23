@@ -19,13 +19,13 @@ class TestLetCode(unittest.TestCase):
 
     def test_kmp(self):
         s = kmp_so()
-        idx = s.strStr("abcbbc", "bbc")
+        idx = s.str_index("abcbbc", "bbc")
         self.assertEqual(idx, 3)
-        idx = s.strStr("leetcode", "leeto")
+        idx = s.str_index("leetcode", "leeto")
         self.assertEqual(idx, -1)
-        idx = s.strStr("aaa", "aaaa")
+        idx = s.str_index("aaa", "aaaa")
         self.assertEqual(idx, -1)
-        idx = s.strStr("mississippi", "issipi")
+        idx = s.str_index("mississippi", "issipi")
         self.assertEqual(idx, -1)
 
 
