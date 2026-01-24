@@ -1,6 +1,6 @@
 class Solution:
     # s: rabbbit , t: rabbit
-    # find sub sequence of rabbit in rabbbit
+    # find sub-sequence of rabbit in rabbbit
 
     # f(i, j) = {
     #   max(i, j) -> if min(x, y) = 0,

@@ -39,12 +39,11 @@ class Helper:
         return False
 
 
-class Solution:
-    def exist(self, board: List[List[str]], word: str) -> bool:
-        h = Helper(board, word)
-        for i in range(h.M):
-            for j in range(h.N):
-                b = [[False] * h.N for _ in range(h.M)]
-                if h.find(0, i, j, b):
-                    return True
-        return False
+def exist(board: List[List[str]], word: str) -> bool:
+    h = Helper(board, word)
+    for i in range(h.M):
+        for j in range(h.N):
+            b = [[False] * h.N for _ in range(h.M)]
+            if h.find(0, i, j, b):
+                return True
+    return False

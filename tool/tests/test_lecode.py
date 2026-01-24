@@ -1,4 +1,4 @@
-from kmp import Solution as kmp_so
+from solutions.array.kmp import Solution as kmp_so
 import unittest
 
 
