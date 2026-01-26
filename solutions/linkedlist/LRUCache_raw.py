@@ -1,6 +1,6 @@
 # Design a data structure that follows the constraints of the Least Recently Used (LRU) cache.
 
-class _link_node(object):
+class LinkedNode(object):
     def __init__(self, key: int, val: int):
         self.key = key
         self.val = val
@@ -8,14 +8,14 @@ class _link_node(object):
         self.next = None
 
 
-class _link(object):
+class LinkedList(object):
     def __init__(self):
-        self.head = _link_node(0, 0)
-        self.tail = _link_node(0, 0)
+        self.head = LinkedNode(0, 0)
+        self.tail = LinkedNode(0, 0)
         self.head.next = self.tail
         self.tail.prev = self.head
 
-    def add_node(self, item: _link_node) -> None:
+    def add_node(self, item: LinkedNode) -> None:
         prev = self.tail.prev
         prev.next = item
         self.tail.prev = item
@@ -23,7 +23,7 @@ class _link(object):
         item.prev = prev
         return
 
-    def move_to_end(self, item: _link_node) -> None:
+    def move_to_end(self, item: LinkedNode) -> None:
         prev = item.prev
         _nex = item.next
         prev.next = _nex
@@ -46,7 +46,7 @@ class LRUCache:
     def __init__(self, capacity: int):
         self._cap = capacity
         self._map = dict()
-        self.list = _link()
+        self.list = LinkedList()
         self.size = 0
 
     def get(self, key: int) -> int:
@@ -64,7 +64,7 @@ class LRUCache:
             self.list.move_to_end(node)
             return
 
-        item = _link_node(key, value)
+        item = LinkedNode(key, value)
         self._map[key] = item
         self.list.add_node(item)
 
