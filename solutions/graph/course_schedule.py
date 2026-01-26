@@ -6,8 +6,8 @@ class Course:
         self.indegree = 0
         self.subseq = []
 
-def findOrder(numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-    graph = [Course() for _ in range(numCourses)]
+def findOrder(nums: int, prerequisites: List[List[int]]) -> List[int]:
+    graph = [Course() for _ in range(nums)]
     for p in prerequisites:
         idf = p[0]
         pre = p[1]
@@ -29,4 +29,4 @@ def findOrder(numCourses: int, prerequisites: List[List[int]]) -> List[int]:
                 queue.append(j)
         idx+=1
 
-    return queue if len(queue) < numCourses else []
+    return queue if len(queue) < nums else []
