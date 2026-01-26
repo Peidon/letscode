@@ -19,14 +19,11 @@ def findOrder(nums: int, prerequisites: List[List[int]]) -> List[int]:
         if not C.indegree:
             queue.append(i)
 
-    idx = 0
-    while idx < len(queue):
-        idf = queue[idx]
+    for idf in queue:
         vet = graph[idf]
         for j in vet.subseq:
-            graph[j].indegree-=1
+            graph[j].indegree -= 1
             if not graph[j].indegree:
                 queue.append(j)
-        idx+=1
 
-    return queue if len(queue) < nums else []
+    return queue if len(queue) == nums else []
