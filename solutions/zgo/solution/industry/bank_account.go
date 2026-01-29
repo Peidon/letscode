@@ -7,13 +7,13 @@ type Bank struct {
 }
 
 type Account struct {
-	Balance     int64
-	Transations []Entry
+	Balance      int64
+	Transactions []Entry
 }
 
 func (a *Account) AddTransaction(timestamp, delta int64) {
 	newBalance := a.Balance + delta
-	a.Transations = append(a.Transations, Entry{
+	a.Transactions = append(a.Transactions, Entry{
 		Timestamp: timestamp,
 		Delta:     delta,
 		Balance:   newBalance,
@@ -51,7 +51,7 @@ func (b *Bank) Create(accountID uint64) {
 	if _, ok := b.Accounts[accountID]; ok {
 		return
 	}
-	b.Accounts[accountID] = &Account{Balance: 0, Transations: make([]Entry, 0)}
+	b.Accounts[accountID] = &Account{Balance: 0, Transactions: make([]Entry, 0)}
 }
 
 func (b *Bank) Deposit(accountID uint64, amount int64, timestamp int64) bool {
@@ -106,11 +106,11 @@ func (b *Bank) Transfer(fromID, toID uint64, amount int64, timestamp int64) bool
 }
 
 func (a *Account) BalanceAt(timestamp int64) int {
-	left, right := 0, len(a.Transations)
+	left, right := 0, len(a.Transactions)
 
 	for left < right {
 		mid := (left + right) / 2
-		if a.Transations[mid].Timestamp <= timestamp {
+		if a.Transactions[mid].Timestamp <= timestamp {
 			left = mid + 1
 		} else {
 			right = mid
@@ -121,10 +121,10 @@ func (a *Account) BalanceAt(timestamp int64) int {
 }
 
 func (a *Account) UndoSince(timestamp int64) int {
-	left, right := 0, len(a.Transations)
+	left, right := 0, len(a.Transactions)
 	for left < right {
 		mid := (left + right) / 2
-		if a.Transations[mid].Timestamp < timestamp {
+		if a.Transactions[mid].Timestamp < timestamp {
 			left = mid + 1
 		} else {
 			right = mid
@@ -136,18 +136,18 @@ func (a *Account) UndoSince(timestamp int64) int {
 func (a *Account) Undo(timestamp, delta int64) {
 	idx := a.UndoSince(timestamp)
 
-	if idx >= len(a.Transations) {
+	if idx >= len(a.Transactions) {
 		return
 	}
 
 	a.Balance += (-delta)
 
 	// remove the original entry
-	a.Transations = append(a.Transations[:idx], a.Transations[idx+1:]...)
+	a.Transactions = append(a.Transactions[:idx], a.Transactions[idx+1:]...)
 
 	// rebalance forward
-	for i := idx; i < len(a.Transations); i++ {
-		a.Transations[i].Balance += (-delta)
+	for i := idx; i < len(a.Transactions); i++ {
+		a.Transactions[i].Balance += (-delta)
 	}
 }
 
@@ -160,7 +160,7 @@ func (b *Bank) BalanceAt(accountID uint64, timestamp int64) *int64 {
 	if idx < 0 {
 		return nil
 	}
-	return &account.Transations[idx].Balance
+	return &account.Transactions[idx].Balance
 }
 
 func (b *Bank) Undo(timestamp int64) bool {

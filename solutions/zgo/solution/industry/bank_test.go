@@ -6,7 +6,7 @@ import (
 
 func TestBinSearch(t *testing.T) {
 	a := &Account{
-		Transations: []Entry{
+		Transactions: []Entry{
 			{Timestamp: -7, Balance: 1},
 			{Timestamp: 0, Balance: 2},
 			{Timestamp: 1, Balance: 3},
