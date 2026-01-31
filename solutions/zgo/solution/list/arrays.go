@@ -1,4 +1,4 @@
-package tree
+package list
 
 type Stack[T any] struct {
 	entries []*T

@@ -1,5 +1,7 @@
 package tree
 
+import "github.com/Peidon/studio/list"
+
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -7,13 +9,13 @@ type TreeNode struct {
 }
 
 type BST struct {
-	stack *Stack[TreeNode]
+	stack *list.Stack[TreeNode]
 	point *TreeNode
 }
 
 func NewBST(root *TreeNode) *BST {
 	return &BST{
-		stack: &Stack[TreeNode]{},
+		stack: new(list.Stack[TreeNode]),
 		point: root,
 	}
 }
