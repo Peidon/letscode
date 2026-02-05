@@ -21,9 +21,11 @@ func NewBST(root *TreeNode) *BST {
 }
 
 /*
-- -. --.- -.-- -> - >
-	\	\ 	\
-	 \
+- -. --.- -.- - -
+	\	\ 	\ __
+	 \		|
+If we rotate the tree and straighten along one side of it,
+then we can see the traversal more obviously.
 */
 
 func (b *BST) Next() *TreeNode {
