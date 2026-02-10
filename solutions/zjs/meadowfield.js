@@ -1,11 +1,11 @@
 const roads = [
-"Alice's House-Bob's House", "Alice's House-Cabin",
-"Alice's House-Post Office", "Bob's House-Town Hall",
-"Daria's House-Ernie's House", "Daria's House-Town Hall",
-"Ernie's House-Grete's House", "Grete's House-Farm",
-"Grete's House-Shop", "Marketplace-Farm",
-"Marketplace-Post Office", "Marketplace-Shop",
-"Marketplace-Town Hall", "Shop-Town Hall"
+    "Alice's House-Bob's House", "Alice's House-Cabin",
+    "Alice's House-Post Office", "Bob's House-Town Hall",
+    "Daria's House-Ernie's House", "Daria's House-Town Hall",
+    "Ernie's House-Grete's House", "Grete's House-Farm",
+    "Grete's House-Shop", "Marketplace-Farm",
+    "Marketplace-Post Office", "Marketplace-Shop",
+    "Marketplace-Town Hall", "Shop-Town Hall"
 ];
 
 function buildGraph(edges) {
@@ -30,8 +30,8 @@ const roadGraph = buildGraph(roads)
 
 class VillageStage {
     constructor(place, parcels) {
-        this.place = place;
-        this.parcels = parcels;
+        this.place = place; // location
+        this.parcels = parcels; // each has current location and a destination address
     }
 
     move(destination) {
@@ -40,9 +40,11 @@ class VillageStage {
         }
 
         let parcels = this.parcels.map(p => {
-            if (p.place != this.place) return p;
-            return {place: destination, address: p.address};
-        }).filter(p=> p.place != p.address);
+            if (p.place == this.place) {
+                p.place = destination;
+            }
+            return p;
+        }).filter(p => p.place != p.address);
 
         return new VillageStage(destination, parcels);
     }
@@ -50,7 +52,7 @@ class VillageStage {
 
 let first = new VillageStage(
     "Post Office",
-    [{place: "Post Office", address: "Alice's House"}]
+    [{ place: "Post Office", address: "Alice's House" }]
 );
 
 let next = first.move("Alice's House");
@@ -60,4 +62,26 @@ console.log(next.place);
 console.log(next.parcels);
 
 console.log(first.place);
+
+function randomPick(array) {
+    let choice = Math.floor(Math.random() * array.length);
+    return array[choice];
+}
+
+function randomRobot(state) {
+    return { direction: randomPick(roadGraph[state.place]) };
+}
+
+function runRobot(state, robot, memory) {
+    for (let turn = 0; ; turn++) {
+        if (state.parcels.length == 0) {
+            console.log(`Done in ${turn} turns`);
+            break;
+        }
+        let action = robot(state, memory);
+        state = state.move(action.direction);
+        memory = action.memory;
+        console.log(`Moved to ${action.direction}`);
+    }
+}
 
