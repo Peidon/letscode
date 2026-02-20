@@ -8,6 +8,11 @@ const roads = [
     "Marketplace-Town Hall", "Shop-Town Hall"
 ];
 
+/**
+ * 
+ * @param {string array} edges
+ * @returns <string, list<string>>
+ */
 function buildGraph(edges) {
     let graph = Object.create(null)
     function addEdge(from, to) {
@@ -26,19 +31,38 @@ function buildGraph(edges) {
     return graph;
 }
 
+// build Adjacency matrix
 const roadGraph = buildGraph(roads)
 
-class VillageStage {
+
+
+class VillageState {
     constructor(place, parcels) {
-        this.place = place; // location
-        this.parcels = parcels; // each has current location and a destination address
+        this.place = place; // location of the village state
+
+        /**
+         *  parcel list
+         *  each parcel has current location and a destination address
+         *  {place, address}
+         */
+        this.parcels = parcels;
+
+
     }
 
+    /**
+     * 
+     * @param {string} destination 
+     * @returns 
+     */
     move(destination) {
+
+        // if there is no direct path to destination
         if (!roadGraph[this.place].includes(destination)) {
             return this;
         }
 
+        // filter parcels which is not yet reached the destination
         let parcels = this.parcels.map(p => {
             if (p.place == this.place) {
                 p.place = destination;
@@ -46,33 +70,63 @@ class VillageStage {
             return p;
         }).filter(p => p.place != p.address);
 
-        return new VillageStage(destination, parcels);
+        // return current village
+        return new VillageState(destination, parcels);
     }
 }
-
-let first = new VillageStage(
-    "Post Office",
-    [{ place: "Post Office", address: "Alice's House" }]
-);
-
-let next = first.move("Alice's House");
-
-console.log(next.place);
-
-console.log(next.parcels);
-
-console.log(first.place);
 
 function randomPick(array) {
     let choice = Math.floor(Math.random() * array.length);
     return array[choice];
 }
 
+/**
+ * 
+ * @param {VillageState} state 
+ * @returns Robot who just has a direction
+ */
 function randomRobot(state) {
     return { direction: randomPick(roadGraph[state.place]) };
 }
 
-function runRobot(state, robot, memory) {
+
+/**
+ * The robot keeps the rest of its route in its memory 
+ * and drops the first element every turn.
+ * @param {VillageState} state 
+ * @param {string list} memory 
+ * @returns 
+ */
+function routeRobot(state, memory) {
+    adjs = roadGraph[state.place].filter(item => !memory.includes(item));
+    memory.push(...adjs);
+    return { direction: memory[0], memory: memory.slice(1) };
+}
+
+/**
+ * 
+ * @param {list<list<string>>} graph : the Adjacency matrix
+ * @param {string} from 
+ * @param {string} to 
+ * @returns 
+ */
+function findRoute(graph, from, to) {
+    let work = [{ at: from, route: [] }];
+    for (let i = 0; i < work.length; i++) {
+        let { at, route } = work[i];
+        for (let place of graph[at]) {
+            if (place == to) return route.concat(place);
+            if (!work.some(w => w.at == place)) {
+                work.push({ at: place, route: route.concat(place) });
+            }
+        }
+    }
+}
+
+function runRobot(state, robot) {
+
+    memory = []
+
     for (let turn = 0; ; turn++) {
         if (state.parcels.length == 0) {
             console.log(`Done in ${turn} turns`);
@@ -85,3 +139,17 @@ function runRobot(state, robot, memory) {
     }
 }
 
+VillageState.random = function (parcelCount = 5) {
+    let parcels = [];
+    for (let i = 0; i < parcelCount; i++) {
+        let address = randomPick(Object.keys(roadGraph));
+        let place;
+        do {
+            place = randomPick(Object.keys(roadGraph));
+        } while (place == address);
+        parcels.push({ place, address });
+    }
+    return new VillageState("Post Office", parcels);
+};
+
+runRobot(VillageState.random(), randomRobot);
