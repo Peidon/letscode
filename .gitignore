@@ -3,3 +3,4 @@
 venv/
 *.proto
 *.zip
+**node_modules
