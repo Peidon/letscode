@@ -8,7 +8,16 @@ function Square({ value, onSquareClick }) {
   );
 }
 
+/**
+ * 
+ * @param {bool} xIsNext taking turns
+ * @param {array} squares stores all of the values, the states of the board
+ * @param {function} onPlay tracks history and move
+ * @returns 
+ */
 function Board({ xIsNext, squares, onPlay }) {
+
+  // this function will pass to the Square component through `onSquareClick`
   function handleClick(i) {
     if (calculateWinner(squares) || squares[i]) {
       return;
