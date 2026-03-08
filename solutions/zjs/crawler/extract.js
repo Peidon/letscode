@@ -1,4 +1,4 @@
-import { get } from "axios";
+import axios from "axios";
 import { load } from "cheerio";
 import { URL } from "url";
 
@@ -16,7 +16,7 @@ async function crawl(startUrl, maxPages = 20) {
         try {
             console.log("Crawling:", currentUrl);
 
-            const response = await get(currentUrl);
+            const response = await axios.get(currentUrl);
             const html = response.data;
 
             visited.add(currentUrl);

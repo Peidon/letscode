@@ -1,4 +1,4 @@
-import { get } from "axios";
+import axios from "axios";
 import { load } from "cheerio";
 import { URL } from "url";
 
@@ -19,13 +19,13 @@ async function crawl() {
         try {
             console.log("Crawling:", url);
 
-            const res = await get(url, { timeout: 5000 });
+            const resp = await axios.get(url, { timeout: 5000 });
 
             await markVisited(url);
 
-            const $ = load(res.data);
+            const $ = load(resp.data);
 
-            $("a[href]").each(async (i, el) => {
+            $("a[href]").each(async (_i, el) => {
 
                 const link = $(el).attr("href");
 
