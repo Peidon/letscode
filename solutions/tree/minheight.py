@@ -1,4 +1,4 @@
-class vertex:
+class Vertex:
     def __init__(self):
         self.conjoin = []
         self.in_degree = 0
@@ -11,67 +11,49 @@ class vertex:
         return self.conjoin.pop()
 
 
+class Graph:
+    def __init__(self, n: int):
+        self.M = [Vertex() for _ in range(n)]
+
+    def conjoin(self, a: int, b: int):
+        self.M[a].append(b)
+        self.M[b].append(a)
+
+    def is_leaf(self, x):
+        return self.M[x].in_degree == 1
+
+    def detach(self, x):
+        v = self.M[x]
+        while v.conjoin:
+            c_idx = v.pop_conjoin()
+            self.M[c_idx].in_degree-=1
+
+
+
 def findMinHeight(n: int, edges):
     if not edges:
         return [0]
 
-    node = [vertex() for _ in range(n)]
+    # adjacent matrix
+    graph = [Vertex() for _ in range(n)]
 
     for out, ind in edges:
-        node[ind].append(out)
-        node[out].append(ind)
+        graph[ind].append(out)
+        graph[out].append(ind)
 
     # leave index
-    leaves = [x for x in range(n) if node[x].in_degree == 1]
+    leaves = [x for x in range(n) if graph[x].in_degree == 1]
 
     while n > 2:
         n -= len(leaves)
         leaves_que = []
         for leaf in leaves:
 
-            c_idx = node[leaf].pop_conjoin()
+            c_idx = graph[leaf].pop_conjoin()
             # c_idx: conjoin vertex index
-            node[c_idx].in_degree -= 1
-            if node[c_idx].in_degree == 1:
+            graph[c_idx].in_degree -= 1
+            if graph[c_idx].in_degree == 1:
                 leaves_que.append(c_idx)
-
-        leaves = leaves_que
-        print(leaves)
-
-    return leaves
-
-
-def findMinHeightTrees(n: int, edges):
-    """
-    :type n: int
-    :type edges: List[List[int]]
-    :rtype: List[int]
-    """
-    adj = [[] for __ in range(n)]
-
-    if not edges:
-        return [0]
-
-    in_degree = [0] * n
-
-    for out, ind in edges:
-        adj[ind].append(out)
-        adj[out].append(ind)
-        in_degree[ind] += 1
-        in_degree[out] += 1
-
-    leaves = [x for x in range(n) if in_degree[x] == 1]
-
-    while n > 2:
-        n -= len(leaves)
-        leaves_que = []
-        for leaf in leaves:
-
-            for adj_idx in adj[leaf]:
-
-                in_degree[adj_idx] -= 1
-                if in_degree[adj_idx] == 1:
-                    leaves_que.append(adj_idx)
 
         leaves = leaves_que
         print(leaves)
