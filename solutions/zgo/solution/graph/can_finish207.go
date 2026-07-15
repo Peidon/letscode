@@ -13,9 +13,9 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 
 	G := make([]Course, numCourses)
 
-	for _, prerequisity := range prerequisites {
-		id := prerequisity[0]
-		pr := prerequisity[1]
+	for _, prerequisite := range prerequisites {
+		id := prerequisite[0]
+		pr := prerequisite[1]
 		G[id].Indegree++
 		G[pr].Subseq = append(G[pr].Subseq, id)
 	}

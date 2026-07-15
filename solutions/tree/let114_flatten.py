@@ -9,44 +9,47 @@ class TreeNode:
         self.right = right
 
 
-class Solution:
-    def flatten(self, root: Optional[TreeNode]) -> None:
-        """
-        Do not return anything, modify root in-place instead.
-        """
-        if not root:
-            return
-        stack = [root]
-        p = root
-        while p:
+def flatten(root: Optional[TreeNode]) -> None:
+    """
+    Do not return anything, modify root in-place instead.
+    For every tree node, move left subtree to right, and move right subtree to
+    the [rightmost node] of the left subtree.
+    """
+    curr = root
 
-            while p.left:
-                stack.append(p.left)
-                p = p.left
+    while curr:
 
-            if p.right:
+        if curr.left:
+
+            # Find the [rightmost node] of the left subtree.
+            p = curr.left
+            while p.right:
                 p = p.right
-            else:
-                a = stack.pop()
-                if a.right:
-                    p.right = a.right
-                a.right = p
-                a.left = None
-                p = a
 
-        return
+            # move right subtree to the [rightmost] of the left subtree.
+            p.right = curr.right
+
+            # move left subtree to the right of current node
+            curr.right = curr.left
+
+            # remove the original reference to the left subtree
+            curr.left = None
+
+        curr = curr.right
+
+    return
 
 # pre-order
 def build_tree(a: List[int]) -> Optional[TreeNode]:
-    if not a:
+    if len(a) == 0:
         return None
 
     root = TreeNode(a[0])
     vec = [root]
-    for x, v in enumerate(a[1:]):
-        if v < 0:
+    for x, num in enumerate(a[1:]):
+        if num < 0:
             continue
-        n = TreeNode(v)
+        n = TreeNode(num)
         vec.append(n)
         k = x // 2
         if x & 1 > 0:
@@ -56,10 +59,17 @@ def build_tree(a: List[int]) -> Optional[TreeNode]:
 
     return root
 
-def travel(t: TreeNode) -> None:
-    pass
+def visit(root: TreeNode):
+    if not root:
+        return
+    print(root.val)
+    visit(root.left)
+    visit(root.right)
+
 
 if __name__ == '__main__':
-    a = [1, 2, 5, 3, 4, -1, 6]
-    t = build_tree(a)
-    Solution().flatten(t)
+    v = [1, 2, 5, 3, 4, -1, 6]
+    t = build_tree(v)
+    flatten(t)
+    visit(t)
+
