@@ -2,6 +2,17 @@ from typing import List
 
 
 def threeSum(nums: List[int]) -> List[List[int]]:
+    """
+    the useful strategy is to shrink the scope of the problem step by step.
+    step 1, make the list ordered, this is very important,
+    that allows us to find out the solutions alongside the iteration.
+    assuming there are already three nums are satisfied the requirement.
+    They may be 2 nums < 0, 1 number > 0, or 2 nums > 0, 1 number < 0.
+    Or we can say , at least one number > 0, one number < 0.
+    So, the scope is definite.
+    When the nums is sorted, left one is the minimum, and right one is the maximum,
+
+    """
     nums.sort()
     lis = []
     for i in range(len(nums) - 2):

@@ -23,7 +23,7 @@ def search(nums, target):
         else:
             return nums.index(target, 0, divide + 1)
     except:
-        return -1
+        raise ValueError("")
 
 if __name__ == '__main__':
     search([1], 1)
