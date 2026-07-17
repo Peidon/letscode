@@ -32,18 +32,16 @@ def _build_next(needle: str) -> list[int]:
     return nex
 
 
-class Solution:
+def str_index(haystack: str, needle: str) -> int:
+    nex = _build_next(needle)
+    i = j = 0
+    while i < len(haystack) and j < len(needle):
+        if haystack[i] != needle[j] and j >= 0:
+            j = nex[j]
+        else:
+            i += 1
+            j += 1
 
-    def str_index(self, haystack: str, needle: str) -> int:
-        nex = _build_next(needle)
-        i = j = 0
-        while i < len(haystack) and j < len(needle):
-            if haystack[i] != needle[j] and j >= 0:
-                j = nex[j]
-            else:
-                i += 1
-                j += 1
-
-        if j < len(needle):
-            return -1
-        return i - j
+    if j < len(needle):
+        return -1
+    return i - j

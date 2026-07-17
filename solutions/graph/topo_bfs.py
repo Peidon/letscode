@@ -7,7 +7,7 @@ class Vertex:
         self.in_degree = 0
 
 
-class graph:
+class Graph:
     def __init__(self, n):
         self.node_list = [Vertex() for _ in range(n)]
 
@@ -28,7 +28,7 @@ def canFinish(num_courses, prerequisites):
     if not prerequisites:
         return True
 
-    g = graph(num_courses)
+    g = Graph(num_courses)
     g.build(prerequisites)
 
     adj_list = g.node_list  # adjacency list

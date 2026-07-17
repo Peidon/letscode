@@ -6,33 +6,31 @@ def is_integer(s: str) -> bool:
     else:
         return s.isdigit()
 
-class Solution:
-    def evalRPN(self, tokens: List[str]) -> int:
-        stack = []
-        for t in tokens:
-            if is_integer(t):
-                stack.append(int(t))
-                continue
-            a = stack.pop()
-            b = stack.pop()
-            if t == "+":
-                stack.append(a + b)
 
-            if t == "-":
-                stack.append(b - a)
+def evalRPN(tokens: List[str]) -> int:
+    stack = []
+    for t in tokens:
+        if is_integer(t):
+            stack.append(int(t))
+            continue
+        a = stack.pop()
+        b = stack.pop()
+        if t == "+":
+            stack.append(a + b)
 
-            if t == "*":
-                stack.append(a * b)
+        if t == "-":
+            stack.append(b - a)
 
-            if t == "/":
-                x = b // a
-                if x < 0:
-                    x = 0
-                stack.append(x)
+        if t == "*":
+            stack.append(a * b)
 
-        return stack.pop()
+        if t == "/":
+            x = int(b / a)
+            stack.append(x)
+
+    return stack.pop()
 
 if __name__ == '__main__':
-    tokens = ["4","-2","/","2","-3","-","-"]
-    a = Solution().evalRPN(tokens)
-    print(a)
+    rpn = ["4","-2","/","2","-3","-","-"]
+    ans = evalRPN(rpn)
+    print(ans)

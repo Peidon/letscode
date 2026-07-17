@@ -3,22 +3,26 @@ from typing import List
 
 
 def adjacent(a: str, b: str) -> bool:
+    """
+    check if a can be mutated to b use just one mutation.
+    """
     c = 0
     for i in range(len(a)):
         if a[i] != b[i]:
             c+=1
     return c==1
 
-def minMutation(startGene: str, endGene: str, bank: List[str]) -> int:
-    queue = deque([startGene])
+def minMutation(start_gene: str, end_gene: str, bank: List[str]) -> int:
+    queue = deque([start_gene])
     bank_mark = set()
     mutation = 0
 
+    # start bfs
     while queue:
         breadth = len(queue)
         for i in range(breadth):
             node = queue.popleft()
-            if node==endGene:
+            if node==end_gene:
                 return mutation
 
             for b in bank:

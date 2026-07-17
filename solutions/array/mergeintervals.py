@@ -3,19 +3,22 @@ def merge(intervals):
     :type intervals: List[List[int]]
     :rtype: List[List[int]]
     """
-    merged = []
+
     intervals.sort(key=lambda x: x[0])
 
-    if len(intervals) > 0:
-        merged.append(intervals[0])
-    for interval in intervals:
-        if merged[-1][-1] < interval[0]:
-            merged.append(interval)
+    offset = 0
+    for a, b in intervals[1:]:
+        if intervals[offset][-1] >= a:
+            intervals[offset][-1] = max(b, intervals[offset][-1])
         else:
-            merged[-1][-1] = max(merged[-1][-1], interval[-1])
+            # intervals[i] of intervals[1:], equals intervals[i-1] of intervals
+            # intervals[offset][-1] = max(intervals[i][-1], intervals[offset][-1])
+            offset+=1
+            intervals[offset] = [a, b]
 
-    return merged
+    return intervals[:offset+1]
 
 
-class Solution(object):
-    pass
+if __name__ == '__main__':
+    m = merge([[1,3],[2,6],[8,10],[15,18]])
+    print(m)
