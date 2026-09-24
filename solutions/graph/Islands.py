@@ -31,7 +31,7 @@ class Earth:
         return False
 
 
-
+# Trace the path when do DFS.
 
 def numIslands(grid: List[List[str]]) -> int:
         e = Earth(grid)
