@@ -16,6 +16,11 @@ class Earth:
         self.N = len(grid[0])
 
     def search_land(self, i:int, j:int) -> bool:
+        """
+        Visit the island start from point(i, j)
+        Mark the island by DFS
+        If this is a new island, return true
+        """
         if i < 0 or j < 0 or i == self.M or j == self.N:
             return False
 

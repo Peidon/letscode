@@ -48,7 +48,7 @@ def exist(board: List[List[str]], word: str) -> bool:
     h = Helper(board, word)
     for i in range(h.M):
         for j in range(h.N):
-
+            # Every position could be the starting point
             if h.find(0, i, j):
                 return True
 

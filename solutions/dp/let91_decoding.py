@@ -36,7 +36,7 @@ class Solution(object):
 
         return False
 
-    def numDecodings(self, s):
+    def numDecoding(self, s):
         """
         :type s: str
         :rtype: int
@@ -64,22 +64,22 @@ class Solution(object):
 
 
 if __name__ == '__main__':
-    n = Solution().numDecodings("27")
+    n = Solution().numDecoding("27")
     assert n==1
 
-    n = Solution().numDecodings("10")
+    n = Solution().numDecoding("10")
     assert n == 1
 
-    n = Solution().numDecodings("100")
+    n = Solution().numDecoding("100")
     assert n == 0
 
-    n = Solution().numDecodings("066")
+    n = Solution().numDecoding("066")
     assert n == 0
 
-    n = Solution().numDecodings("226")
+    n = Solution().numDecoding("226")
     assert n == 3
 
-    n = Solution().numDecodings("123123")
+    n = Solution().numDecoding("123123")
     assert n == 9
 
     print("Success")

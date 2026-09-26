@@ -51,7 +51,3 @@ def canFinish(num_courses, prerequisites):
                 queue.append(adjacency)
 
     return not num_courses
-
-
-if __name__ == '__main__':
-    print(canFinish(3, [[1, 0], [1, 2]]))

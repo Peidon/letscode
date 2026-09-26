@@ -7,21 +7,31 @@ class Course:
         self.subseq = []
 
 def findOrder(nums: int, prerequisites: List[List[int]]) -> List[int]:
-    graph = [Course() for _ in range(nums)]
-    for p in prerequisites:
-        idf = p[0]
-        pre = p[1]
-        graph[idf].indegree+=1
-        graph[pre].subseq.append(idf)
+    """
+    There are a total of `nums` courses labeled from 0 to `nums-1`,
+    Given prerequisites, where prerequisites[i] = [a_, b_], b_ is the prerequisite of a_.
+    Return the ordering of courses you should take to finish all courses.
+    """
 
+    # 1. parse the inputs to graph
+    graph = [Course() for _ in range(nums)]
+
+    for p in prerequisites:
+        cur = p[0]
+        pre = p[1]
+        graph[cur].indegree+=1
+        graph[pre].subseq.append(cur)
+
+    # 2. initial the graph
     queue = list()
-    for i, C in enumerate(graph):
-        if not C.indegree:
+    for i, course in enumerate(graph):
+        if not course.indegree:
             queue.append(i)
 
-    for idf in queue:
-        vet = graph[idf]
-        for j in vet.subseq:
+    # 3. topo sort
+    for cur in queue:
+        course = graph[cur]
+        for j in course.subseq:
             graph[j].indegree -= 1
             if not graph[j].indegree:
                 queue.append(j)
